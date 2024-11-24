@@ -1,0 +1,171 @@
+/**
+ * Tally App Styles
+ * Version: 2.2.0
+ */
+
+/* Theme variables */
+:root {
+    --bg-color: #1a1a1a;
+    --text-color: #ffffff;
+    --item-bg-color: #2a2a2a;
+    --item-border-color: #3a3a3a;
+    --button-bg-color: #3a3a3a;
+    --button-hover-color: #4a4a4a;
+    --dialog-bg-color: #2a2a2a;
+}
+
+/* General layout and typography */
+body {
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+/* Button styles */
+button {
+    margin: 5px;
+    padding: 5px 10px;
+    background-color: var(--button-bg-color);
+    color: var(--text-color);
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: var(--button-hover-color);
+}
+
+/* Profile selector dropdown */
+select {
+    margin: 5px;
+    padding: 5px;
+    background-color: var(--button-bg-color);
+    color: var(--text-color);
+    border: none;
+    border-radius: 3px;
+}
+
+/* Item list container */
+#itemList {
+    min-height: 100px;
+    position: relative;
+}
+
+/* Individual item styling */
+.item {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid var(--item-border-color);
+    border-radius: 5px;
+    cursor: move;
+    background-color: var(--item-bg-color);
+}
+
+.item-name {
+    font-size: 24px;
+    flex-grow: 1;
+    white-space: nowrap;
+}
+
+.item-count {
+    font-size: 24px;
+    margin-left: 1em;
+    margin-right: 10px;
+}
+
+/* Button size variants */
+.big-button {
+    font-size: 24px;
+    padding: 5px 15px;
+}
+
+.small-button {
+    font-size: 16px;
+    padding: 2px 8px;
+}
+
+/* Page title */
+#pageTitle {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+/* Drag and drop visual feedback */
+.dragging {
+    opacity: 0.5;
+}
+
+/* Edit dialog styling */
+.edit-dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--dialog-bg-color);
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    z-index: 1000;
+}
+
+.edit-dialog input {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 10px;
+    background-color: var(--item-bg-color);
+    color: var(--text-color);
+    border: 1px solid var(--item-border-color);
+}
+
+.edit-dialog button {
+    margin-right: 10px;
+}
+
+/* Top bar layout */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.profile-selector {
+    margin-left: auto;
+}
+
+/* Increment value input styling */
+.increment-value {
+    background-color: var(--item-bg-color);
+    color: var(--text-color);
+    border: 1px solid var(--item-border-color);
+    border-radius: 3px;
+    padding: 2px;
+    width: 50px;
+    text-align: center;
+    margin: 0 5px;
+    font-size: 16px;
+}
+
+.increment-value:focus {
+    outline: none;
+    border-color: var(--text-color);
+}
+
+/* Hide number input spinners */
+.increment-value::-webkit-inner-spin-button,
+.increment-value::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.increment-value[type=number] {
+    -moz-appearance: textfield;
+}
