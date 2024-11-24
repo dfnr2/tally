@@ -3,9 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Page Title</title>
+    <title>Tally App</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <iframe src="tally.html" style="width: 100%; height: 100vh; border: none;"></iframe>
+    <div class="top-bar">
+        <h1 id="pageTitle">Tally App</h1>
+        <div class="profile-selector">
+            <select id="profileSelector"></select>
+        </div>
+    </div>
+    <button id="addItemBtn">Add Item</button>
+    <button id="exportBtn">Export Profiles</button>
+    <input type="file" id="importFile" style="display: none;">
+    <button id="importBtn">Import Profiles</button>
+    <button id="clearAllBtn">Clear All</button>
+    <div id="itemList"></div>
+
+    <script type="module" src="js/app.js"></script>
 </body>
 </html>
