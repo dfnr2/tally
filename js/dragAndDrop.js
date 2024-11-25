@@ -1,6 +1,6 @@
 /**
 * Drag and Drop Module
-* @version 2.2.0
+* @version 2.3.0
 * @description Handles all drag and drop functionality for reordering items
 * within a profile.
 */
