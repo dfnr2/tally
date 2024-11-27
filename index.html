@@ -6,6 +6,7 @@
     <title>Tally App v2.2.0</title>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="icon" href="data:,">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
 </head>
 <body>
     <div class="top-bar">
@@ -16,7 +17,7 @@
     </div>
     <button id="addItemBtn">Add Item</button>
     <button id="exportBtn">Export Profiles</button>
-    <input type="file" id="importFile" style="display: none;">
+    <input type="file" id="importFile" accept=".yaml,.yml" style="display: none;">
     <button id="importBtn">Import Profiles</button>
     <button id="clearAllBtn">Clear All</button>
     <div id="itemList"></div>

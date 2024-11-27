@@ -1,11 +1,15 @@
 /**
-* Drag and Drop Module
-* @version 2.3.0
-* @description Handles all drag and drop functionality for reordering items
-* within a profile.
-*/
+ * Drag and Drop Module
+ * @version 3
+ * @description Handles all drag and drop functionality for reordering items.
+ *
+ * @changelog
+ * 3 - Added cookie state storage support
+ * 2 - Event listener architecture
+ * 1 - Initial module version
+ */
 
-import { profiles, currentProfileIndex } from './app.js';
+import { profiles, currentProfileIndex, updateState } from './app.js';
 import { renderItems } from './itemManager.js';
 
 /**
@@ -57,6 +61,7 @@ export function drop(e) {
        };
    });
    renderItems();
+   updateState();  // Add this line
 }
 
 /**

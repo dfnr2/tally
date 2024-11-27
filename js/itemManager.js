@@ -1,19 +1,19 @@
 /**
 * Item Manager Module
-* @version 2.3.0
+* @version 3
 * @description Handles all item-related functionality including rendering,
 * creation, editing, counting, and deletion of items.
 *
 * @changelog
-* 2.3.0 - Updated to use event listeners instead of inline handlers
-* 2.2.0 - Added increment value feature
-* 2.1.0 - Added file dialog for export
-* 2.0.0 - Initial module version
+* 3 - Added cookie state storage support
+* 2 - Event listener architecture
+* 1 - Initial module version
 */
 
 import { profiles, currentProfileIndex } from './app.js';
 import { closeEditDialog } from './uiManager.js';
 import { dragStart, dragEnd, dragOver, drop } from './dragAndDrop.js';
+import { updateState } from './app.js';
 
 /**
 * Creates an item element with all its controls.
@@ -68,10 +68,6 @@ function createItemElement(index, name, count) {
    return itemDiv;
 }
 
-/**
-* Validates and corrects the increment value input.
-* @param {HTMLInputElement} input - The input element to validate
-*/
 export function validateIncrementValue(input) {
    let value = parseInt(input.value);
    if (isNaN(value) || value < 1) {
@@ -81,9 +77,6 @@ export function validateIncrementValue(input) {
    }
 }
 
-/**
-* Renders the items of the current profile.
-*/
 export function renderItems() {
    const currentProfile = profiles[currentProfileIndex];
    document.getElementById('pageTitle').textContent = currentProfile.title;
@@ -107,7 +100,6 @@ export function renderItems() {
        const itemDiv = createItemElement(index, item.name, item.count);
        itemDiv.style.width = `${maxWidth + 250}px`;
 
-       // Add drag and drop listeners
        itemDiv.addEventListener('dragstart', dragStart);
        itemDiv.addEventListener('dragend', dragEnd);
        itemDiv.addEventListener('dragover', dragOver);
@@ -117,10 +109,6 @@ export function renderItems() {
    });
 }
 
-/**
-* Opens the edit dialog for an item.
-* @param {number} index - The index of the item to edit
-*/
 export function editItem(index) {
    const item = profiles[currentProfileIndex].items[index];
    const dialog = document.createElement('div');
@@ -152,10 +140,6 @@ export function editItem(index) {
    input.focus();
 }
 
-/**
-* Updates an item's name.
-* @param {number} index - The index of the item to update
-*/
 export function updateItem(index) {
    const input = document.getElementById('editItemName');
    const newName = input.value;
@@ -163,36 +147,28 @@ export function updateItem(index) {
        profiles[currentProfileIndex].items[index].name = newName;
        closeEditDialog();
        renderItems();
+       updateState();  // Save state after item update
    }
 }
 
-/**
-* Deletes an item from the current profile.
-* @param {number} index - The index of the item to delete
-*/
 export function deleteItem(index) {
    if (confirm('Are you sure you want to delete this item?')) {
        profiles[currentProfileIndex].items.splice(index, 1);
        closeEditDialog();
        renderItems();
+       updateState();  // Save state after item deletion
    }
 }
 
-/**
-* Adds a new item to the current profile.
-*/
 export function addItem() {
    const name = prompt('Enter item name:');
    if (name) {
        profiles[currentProfileIndex].items.push({ name, count: 0 });
        renderItems();
+       updateState();  // Save state after adding item
    }
 }
 
-/**
-* Increments the count of an item by the increment value.
-* @param {number} index - The index of the item to increment
-*/
 export function incrementItem(index) {
    const incrementValue = parseInt(
        document.querySelector(`#itemList .item:nth-child(${index + 1}) .increment-value`).value
@@ -200,12 +176,9 @@ export function incrementItem(index) {
    profiles[currentProfileIndex].items[index].count += incrementValue;
    document.querySelector(`#itemList .item:nth-child(${index + 1}) .increment-value`).value = 1;
    renderItems();
+   updateState();  // Save state after incrementing
 }
 
-/**
-* Decrements the count of an item by the increment value.
-* @param {number} index - The index of the item to decrement
-*/
 export function decrementItem(index) {
    const incrementValue = parseInt(
        document.querySelector(`#itemList .item:nth-child(${index + 1}) .increment-value`).value
@@ -214,23 +187,19 @@ export function decrementItem(index) {
    profiles[currentProfileIndex].items[index].count = Math.max(0, currentCount - incrementValue);
    document.querySelector(`#itemList .item:nth-child(${index + 1}) .increment-value`).value = 1;
    renderItems();
+   updateState();  // Save state after decrementing
 }
 
-/**
-* Clears the count of an item.
-* @param {number} index - The index of the item to clear
-*/
 export function clearItem(index) {
    profiles[currentProfileIndex].items[index].count = 0;
    renderItems();
+   updateState();  // Save state after clearing item
 }
 
-/**
-* Clears all item counts in the current profile.
-*/
 export function clearAll() {
    profiles[currentProfileIndex].items.forEach(item => item.count = 0);
    renderItems();
+   updateState();  // Save state after clearing all
 }
 
 //--------+---------+---------+---------+---------+---------+---------+---------+

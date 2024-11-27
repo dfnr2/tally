@@ -1,34 +1,28 @@
 /**
  * Profile Manager Module
- * @version 2.3.0
+ * @version 3
  * @description Handles all profile-related functionality including rendering,
  * creation, editing, and deletion of profiles.
  *
  * @changelog
- * 2.3.0 - Updated to use event listeners instead of inline handlers
- * 2.2.0 - Added increment value feature
- * 2.1.0 - Added file dialog for export
- * 2.0.0 - Initial module version
+ * 3 - Added cookie state storage support
+ * 2 - Event listener architecture
+ * 1 - Initial module version
  */
 
 import { profiles } from './app.js';
 import { renderItems } from './itemManager.js';
 import { closeEditDialog } from './uiManager.js';
+import { updateState } from './app.js';
 
-let localCurrentProfileIndex = 0;  // Initialize to 0 first
+let localCurrentProfileIndex = 0;
 
-/**
- * Initializes the profile manager with the current index
- * @param {number} index - The initial profile index
- */
+console.log('Loading profileManager.js');
+
 export function initProfileManager(index) {
     localCurrentProfileIndex = index;
 }
 
-/**
- * Renders the profile selector dropdown.
- * Populates the dropdown with profile titles and an "Add Profile" option.
- */
 export function renderProfileSelector() {
     const selector = document.getElementById('profileSelector');
     selector.innerHTML = '';
@@ -45,21 +39,6 @@ export function renderProfileSelector() {
     selector.value = localCurrentProfileIndex;
 }
 
-/**
- * Updates the current profile index and triggers any necessary updates
- * @param {number} index - The new profile index
- */
-export function setCurrentProfileIndex(index) {
-    localCurrentProfileIndex = index;
-    renderProfileSelector();
-    renderItems();
-}
-
-/**
- * Handles changes in the profile selector.
- * If "Add Profile" is selected, calls addProfile().
- * Otherwise, updates the currentProfileIndex and renders items.
- */
 export function handleProfileChange() {
     const selectedValue = document.getElementById('profileSelector').value;
     if (selectedValue === 'add') {
@@ -67,42 +46,31 @@ export function handleProfileChange() {
     } else {
         const newIndex = parseInt(selectedValue);
         localCurrentProfileIndex = newIndex;
-        // Update the global state
         window.dispatchEvent(new CustomEvent('profileChanged', {
             detail: { newIndex }
         }));
         renderItems();
+        updateState();  // Save state after profile change
     }
 }
 
-/**
- * Adds a new profile.
- * Prompts the user for a profile name, adds it to the profiles array,
- * updates the currentProfileIndex, and re-renders the UI.
- */
 export function addProfile() {
     const title = prompt('Enter new profile name:');
     if (title) {
         profiles.push({ title, items: [] });
-        // Set new index
         const newIndex = profiles.length - 1;
         localCurrentProfileIndex = newIndex;
-        // Update global state
         window.dispatchEvent(new CustomEvent('profileChanged', {
             detail: { newIndex }
         }));
-        // Update UI
         renderProfileSelector();
-        renderItems();  // This should now show the empty list for the new profile
+        renderItems();
+        updateState();  // Save state after adding profile
     } else {
         document.getElementById('profileSelector').value = localCurrentProfileIndex;
     }
 }
 
-/**
- * Opens the edit dialog for the current profile.
- * Creates and displays a dialog with options to edit the profile name or delete the profile.
- */
 export function editProfile() {
     const currentProfile = profiles[localCurrentProfileIndex];
     const dialog = document.createElement('div');
@@ -134,11 +102,6 @@ export function editProfile() {
     input.focus();
 }
 
-/**
- * Updates the current profile's title.
- * Retrieves the new name from the input field, updates the profile,
- * closes the dialog, and re-renders the UI.
- */
 export function updateProfile() {
     const input = document.getElementById('editProfileName');
     const newName = input.value;
@@ -147,19 +110,21 @@ export function updateProfile() {
         closeEditDialog();
         renderProfileSelector();
         renderItems();
+        updateState();  // Save state after profile update
     }
 }
 
-/**
- * Deletes the current profile.
- * Confirms with the user before deleting. Prevents deletion of the last profile.
- * Updates the currentProfileIndex and re-renders the UI after deletion.
- */
 export function deleteProfile() {
     if (profiles.length > 1 && confirm('Are you sure you want to delete this profile?')) {
         profiles.splice(localCurrentProfileIndex, 1);
-        setCurrentProfileIndex(0);
+        localCurrentProfileIndex = 0;
+        window.dispatchEvent(new CustomEvent('profileChanged', {
+            detail: { newIndex: 0 }
+        }));
         closeEditDialog();
+        renderProfileSelector();
+        renderItems();
+        updateState();  // Save state after profile deletion
     } else if (profiles.length <= 1) {
         alert('Cannot delete the last profile.');
     }

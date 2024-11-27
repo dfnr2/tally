@@ -1,14 +1,12 @@
 /**
  * Import/Export Module
- * @version 2.3.0
- * @description Handles importing and exporting of profile data, including
- * file system interactions and data validation.
+ * @version 3
+ * @description Handles importing and exporting of profile data.
  *
  * @changelog
- * 2.3.0 - Updated to use event listeners instead of inline handlers
- * 2.2.0 - Added increment value feature
- * 2.1.0 - Added file dialog for export
- * 2.0.0 - Initial module version
+ * 3 - Added cookie state storage support
+ * 2 - YAML support
+ * 1 - Initial module version
  */
 
 import { profiles, currentProfileIndex } from './app.js';
@@ -16,7 +14,7 @@ import { renderProfileSelector } from './profileManager.js';
 import { renderItems } from './itemManager.js';
 
 /**
- * Exports all profiles to a JSON file using the File System Access API.
+ * Exports all profiles to a YAML file using the File System Access API.
  * Falls back to older download method if the API is not supported.
  */
 export async function exportProfiles() {
@@ -25,16 +23,22 @@ export async function exportProfiles() {
         profiles: profiles,
         defaultProfileIndex: currentProfileIndex
     };
-    const dataStr = JSON.stringify(dataToExport, null, 2);
-    const blob = new Blob([dataStr], {type: "application/json"});
+    const yamlStr = jsyaml.dump(dataToExport, {
+        indent: 2,
+        lineWidth: -1,  // Don't wrap long lines
+        noRefs: true    // Don't use YAML references
+    });
+    const blob = new Blob([yamlStr], {type: "text/yaml"});
 
     if ('showSaveFilePicker' in window) {
         try {
             const handle = await window.showSaveFilePicker({
-                suggestedName: 'tally-profiles.json',
+                suggestedName: 'tally-profiles.yaml',
                 types: [{
-                    description: 'JSON File',
-                    accept: {'application/json': ['.json']},
+                    description: 'YAML File',
+                    accept: {
+                        'text/yaml': ['.yaml', '.yml']
+                    },
                 }],
             });
             const writable = await handle.createWritable();
@@ -59,11 +63,32 @@ function fallbackExport(blob) {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "tally-profiles.json";
+    a.download = "tally-profiles.yaml";
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+}
+
+/**
+ * Handles the import of profiles from YAML data
+ * @param {string} yamlData - The YAML string to import
+ */
+export function handleImport(yamlData) {
+    try {
+        const importedData = jsyaml.load(yamlData);
+        if (!importedData || !importedData.profiles) {
+            throw new Error('Invalid YAML format: missing profiles');
+        }
+        profiles.length = 0; // Clear existing profiles
+        profiles.push(...importedData.profiles);
+        currentProfileIndex = importedData.defaultProfileIndex || 0;
+        renderProfileSelector();
+        renderItems();
+    } catch (error) {
+        console.error('Error parsing YAML:', error);
+        alert('Invalid YAML file');
+    }
 }
 
 //--------+---------+---------+---------+---------+---------+---------+---------+

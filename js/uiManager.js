@@ -1,14 +1,12 @@
 /**
  * UI Manager Module
- * @version 2.3.0
- * @description Handles generic UI functionality that doesn't fit into other
- * specific modules, such as dialog management.
+ * @version 3
+ * @description Handles generic UI functionality.
  *
  * @changelog
- * 2.3.0 - Updated to use event listeners instead of inline handlers
- * 2.2.0 - Added increment value feature
- * 2.1.0 - Added file dialog for export
- * 2.0.0 - Initial module version
+ * 3 - Added cookie state storage support
+ * 2 - Event listener architecture
+ * 1 - Initial module version
  */
 
 /**
