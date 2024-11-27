@@ -11,9 +11,10 @@
  */
 
 import { profiles } from './app.js';
+import { updateState } from './app.js';
 import { renderItems } from './itemManager.js';
 import { closeEditDialog } from './uiManager.js';
-import { updateState } from './app.js';
+import { exportProfiles } from './importExport.js';
 
 let localCurrentProfileIndex = 0;
 
@@ -26,23 +27,51 @@ export function initProfileManager(index) {
 export function renderProfileSelector() {
     const selector = document.getElementById('profileSelector');
     selector.innerHTML = '';
+
+    // Add profile options
     profiles.forEach((profile, index) => {
         const option = document.createElement('option');
         option.value = index;
         option.textContent = profile.title;
         selector.appendChild(option);
     });
+
+    // Add separator
+    const separator = document.createElement('option');
+    separator.disabled = true;
+    separator.textContent = '──────────';
+    selector.appendChild(separator);
+
+    // Add utility options
     const addOption = document.createElement('option');
     addOption.value = 'add';
     addOption.textContent = '+ Add Profile';
     selector.appendChild(addOption);
+
+    const exportOption = document.createElement('option');
+    exportOption.value = 'export';
+    exportOption.textContent = '↓ Export Profiles';
+    selector.appendChild(exportOption);
+
+    const importOption = document.createElement('option');
+    importOption.value = 'import';
+    importOption.textContent = '↑ Import Profiles';
+    selector.appendChild(importOption);
+
     selector.value = localCurrentProfileIndex;
 }
 
 export function handleProfileChange() {
-    const selectedValue = document.getElementById('profileSelector').value;
+    const selector = document.getElementById('profileSelector');  // Add this line
+    const selectedValue = selector.value;
     if (selectedValue === 'add') {
         addProfile();
+    } else if (selectedValue === 'export') {
+        exportProfiles();
+        selector.value = localCurrentProfileIndex;  // Now this will work
+    } else if (selectedValue === 'import') {
+        document.getElementById('importFile').click();
+        selector.value = localCurrentProfileIndex;  // Now this will work
     } else {
         const newIndex = parseInt(selectedValue);
         localCurrentProfileIndex = newIndex;

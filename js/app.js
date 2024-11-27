@@ -93,8 +93,6 @@ function setupEventListeners() {
     document.getElementById('pageTitle').addEventListener('dblclick', editProfile);
     document.getElementById('profileSelector').addEventListener('change', handleProfileChange);
     document.getElementById('addItemBtn').addEventListener('click', addItem);
-    document.getElementById('exportBtn').addEventListener('click', exportProfiles);
-    document.getElementById('importBtn').addEventListener('click', () => importFileInput.click());
     document.getElementById('clearAllBtn').addEventListener('click', clearAll);
 
     // Add listener for profile changes
