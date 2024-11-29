@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tally App v2.2.0</title>
+    <title>Tally App v2.3.0</title>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="icon" href="data:,">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
@@ -18,6 +18,12 @@
     <button id="addItemBtn">Add Item</button>
     <input type="file" id="importFile" accept=".yaml,.yml" style="display: none;">
     <button id="clearAllBtn">Clear All</button>
+    <div id="rowCalculator" class="calculator">
+        <span class="calc-label">Row count calculator:</span>
+        <input type="number" id="firstRow" placeholder="First row" class="calc-input">
+        <input type="number" id="lastRow" placeholder="Last row" class="calc-input">
+        <span id="rowCount" class="calc-result">Count: 0</span>
+    </div>
     <div id="itemList"></div>
 
     <!-- Load modules -->

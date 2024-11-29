@@ -1,6 +1,6 @@
 /**
 * Item Manager Module
-* @version 3
+* @version 4
 * @description Handles all item-related functionality including rendering,
 * creation, editing, counting, and deletion of items.
 *
@@ -41,12 +41,25 @@ function createItemElement(index, name, count) {
    incrementBtn.textContent = '+';
    incrementBtn.addEventListener('click', () => incrementItem(index));
 
-   const input = document.createElement('input');
+  const input = document.createElement('input');
    input.type = 'number';
    input.className = 'increment-value';
    input.value = '1';
    input.min = '1';
    input.addEventListener('change', (e) => validateIncrementValue(e.target));
+
+  input.addEventListener('click', (e) => {
+    const rowCount = document.getElementById('rowCount');
+    const count = parseInt(rowCount.textContent.replace('Count: ', '')) || 0;
+    if (count > 1) {
+      e.target.value = count;
+      validateIncrementValue(e.target);
+    }
+    // Clear calculator
+    document.getElementById('firstRow').value = '';
+    document.getElementById('lastRow').value = '';
+    rowCount.textContent = 'Count: 0';
+  });
 
    const decrementBtn = document.createElement('button');
    decrementBtn.className = 'small-button';
@@ -202,5 +215,45 @@ export function clearAll() {
    updateState();  // Save state after clearing all
 }
 
+/**
+ * Sets up the row calculator functionality
+ */
+function setupRowCalculator() {
+    const firstRow = document.getElementById('firstRow');
+    const lastRow = document.getElementById('lastRow');
+    const rowCount = document.getElementById('rowCount');
+
+    function updateRowCount() {
+        const first = parseInt(firstRow.value) || 0;
+        const last = parseInt(lastRow.value) || 0;
+
+        if (first && last && last >= first) {
+            const count = 1 + last - first;
+            rowCount.textContent = `Count: ${count}`;
+            // Make the count clickable
+            rowCount.style.cursor = 'pointer';
+            rowCount.onclick = () => {
+                const incrementInputs = document.querySelectorAll('.increment-value');
+                const focusedInput = document.activeElement;
+                if (focusedInput && focusedInput.classList.contains('increment-value')) {
+                    focusedInput.value = count;
+                    validateIncrementValue(focusedInput);
+                }
+            };
+        } else {
+            rowCount.textContent = 'Count: 0';
+            rowCount.style.cursor = 'default';
+            rowCount.onclick = null;
+        }
+    }
+
+    firstRow.addEventListener('input', updateRowCount);
+    lastRow.addEventListener('input', updateRowCount);
+}
+
+// Initialize the  calculator
+export function initRowCalculator() {
+    setupRowCalculator();
+}
 //--------+---------+---------+---------+---------+---------+---------+---------+
 // end of file

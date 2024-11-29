@@ -1,6 +1,6 @@
 /**
  * Tally App Styles
- * Version: 2.2.0
+ * Version: 3
  */
 
 /* Theme variables */
@@ -168,4 +168,34 @@ select {
 
 .increment-value[type=number] {
     -moz-appearance: textfield;
+}
+
+.calculator {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: var(--item-bg-color);
+    border-radius: 5px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.calc-input {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    border: 1px solid var(--item-border-color);
+    border-radius: 3px;
+    padding: 5px;
+    width: 80px;
+}
+
+.calc-result {
+    margin-left: 10px;
+    font-size: 16px;
+}
+
+.calc-label {
+    color: var(--text-color);
+    font-size: 16px;
+    margin-right: 10px;
 }

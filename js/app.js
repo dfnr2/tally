@@ -1,6 +1,6 @@
 /**
  * Tally App - Main Application Module
- * @version 2.4.0
+ * @version 3
  * @description Entry point for the Tally App. Initializes the application,
  * manages global state, and sets up event handlers.
  *
@@ -14,7 +14,7 @@
 
 import { renderProfileSelector, handleProfileChange, editProfile, initProfileManager }
     from './profileManager.js';
-import { renderItems, addItem, clearAll } from './itemManager.js';
+import { renderItems, addItem, clearAll, initRowCalculator } from './itemManager.js';
 import { exportProfiles } from './importExport.js';
 
 // Global state
@@ -144,6 +144,9 @@ function init() {
     // Initial render
     renderProfileSelector();
     renderItems();
+
+    // Initialize the row calculator
+    initRowCalculator()
 }
 
 // Initialize the application
