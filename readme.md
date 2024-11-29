@@ -1,6 +1,6 @@
 # Tally App
 
-## Version 2.1.0
+## Version 2.3.0
 
 A multi-profile tally counter application built with vanilla JavaScript.
 
@@ -13,10 +13,18 @@ Tally App is a versatile, browser-based application that allows users to create 
 - Multiple tally profiles
 - Add, edit, delete, and reorder items within profiles
 - Increment, decrement, and clear item counts
+- ```inrement``` register for each row. Type in a number and the tally can be
+  incremented or decremented by the amount in the register, which is then reset
+  to the default value (1).
 - Export and import functionality for all profiles
 - Responsive design with a max-width of 800px
 - Drag-and-drop functionality for reordering items
-- Dark theme for improved visibility in low-light conditions
+- Store profiles in cookie to avoid need for reloading when using same browser
+
+- Spreadsheet row count calculator. Yes, it's the simplest formula in the world:
+  ```1 + last - first``` but the calculator can avoid errors, and the number can
+  be inserted directly into the increment value for an item for quick tallying.
+
 
 ## Installation
 
